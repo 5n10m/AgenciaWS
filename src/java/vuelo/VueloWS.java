@@ -26,9 +26,14 @@ public class VueloWS {
      */
     
     @WebMethod(operationName = "consulta_libres")
-    public int consulta_libres(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha) throws ClassNotFoundException {
+    public int consulta_libres(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha) {
         //TODO write your implementation code here:
+        try {
         Class.forName("org.sqlite.JDBC");
+        }
+        catch (ClassNotFoundException e){
+            System.err.println(e.getMessage());
+        }
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david.molins.goma\\Downloads\\sqlite-jdbc-3.7.2");
@@ -55,9 +60,14 @@ public class VueloWS {
      */
     
     @WebMethod(operationName = "reserva_plaza")
-    public int reserva_plaza(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha) throws ClassNotFoundException {
+    public int reserva_plaza(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha){
         //TODO write your implementation code here:
+        try {
         Class.forName("org.sqlite.JDBC");
+        }
+        catch (ClassNotFoundException e){
+            System.err.println(e.getMessage());
+        }
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite");

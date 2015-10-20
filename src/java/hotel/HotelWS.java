@@ -22,9 +22,14 @@ import javax.jws.WebParam;
 public class HotelWS {
 
     @WebMethod(operationName = "consulta_libres")
-    public int consulta_libres(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha) throws ClassNotFoundException, SQLException {
+    public int consulta_libres(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha){
         //TODO write your implementation code here:
+        try {
         Class.forName("org.sqlite.JDBC");
+        }
+        catch (ClassNotFoundException e){
+            System.err.println(e.getMessage());
+        }
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david.molins.goma\\Downloads\\sqlite-jdbc-3.7.2");
@@ -44,9 +49,14 @@ public class HotelWS {
      */
     
     @WebMethod(operationName = "reserva_habitacion")
-    public int reserva_habitacion(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha) throws ClassNotFoundException {
+    public int reserva_habitacion(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha){
         //TODO write your implementation code here:
-    Class.forName("org.sqlite.JDBC");
+    try {
+        Class.forName("org.sqlite.JDBC");
+        }
+        catch (ClassNotFoundException e){
+            System.err.println(e.getMessage());
+        }
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david.molins.goma\\Downloads\\sqlite-jdbc-3.7.2");
