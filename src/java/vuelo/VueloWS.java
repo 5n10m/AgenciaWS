@@ -21,7 +21,7 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "VueloWS")
 public class VueloWS {
-
+    String dbpath = "\"jdbc:sqlite:C:\\\\Users\\\\david.molins.goma\\\\Downloads\\\\sqlite-jdbc-3.7.2\"";
     /**
      * Dados un identificador de vuelo y una fecha, retorna el número de plazas que están libres
      */
@@ -37,7 +37,7 @@ public class VueloWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david.molins.goma\\Downloads\\sqlite-jdbc-3.7.2");
+            connection = DriverManager.getConnection(dbpath);
             Statement statement = connection.createStatement();
             String id = Integer.toString(id_vuelo);
             String date = Integer.toString(fecha);
@@ -71,7 +71,7 @@ public class VueloWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite");
+            connection = DriverManager.getConnection(dbpath);
             Statement statement = connection.createStatement();
             String id = Integer.toString(id_vuelo);
             String date = Integer.toString(fecha);

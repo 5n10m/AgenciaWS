@@ -20,6 +20,7 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "HotelWS")
 public class HotelWS {
+    String dbpath = "\"jdbc:sqlite:C:\\\\Users\\\\david.molins.goma\\\\Downloads\\\\sqlite-jdbc-3.7.2\"";
 
     @WebMethod(operationName = "consulta_libres")
     public int consulta_libres(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha){
@@ -32,7 +33,7 @@ public class HotelWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david.molins.goma\\Downloads\\sqlite-jdbc-3.7.2");
+            connection = DriverManager.getConnection(dbpath);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT num_hab_libres FROM hotel_fecha where id_hotel = "+ id_hotel +" and fecha = "+ fecha );
             return Integer.parseInt(rs.getString("num_hab_libres"));
@@ -59,7 +60,7 @@ public class HotelWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david.molins.goma\\Downloads\\sqlite-jdbc-3.7.2");
+            connection = DriverManager.getConnection(dbpath);
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery("SELECT num_hab_libres FROM hotel_fecha where id_hotel = "+ id_hotel +" and fecha = "+ fecha);
             if(0 < Integer.parseInt(res.getString("num_hab_libres"))){
