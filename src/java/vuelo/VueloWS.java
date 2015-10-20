@@ -40,7 +40,7 @@ public class VueloWS {
             Statement statement = connection.createStatement();
             String id = Integer.toString(id_vuelo);
             String date = Integer.toString(fecha);
-            ResultSet rs = statement.executeQuery("select num_plazas_max, num_plazas_ocupadas from vuelo_fecha where id_vuelo = \"" + id + "\" and fecha = " + date);
+            ResultSet rs = statement.executeQuery("select num_plazas_max, num_plazas_ocupadas from vuelo_fecha where id_vuelo = " + id + " and fecha = " + date);
             int max = rs.getInt("num_plazas_max");
             int ocupadas = rs.getInt("num_plazas_ocupadas");
             int libres = max - ocupadas;
@@ -74,13 +74,13 @@ public class VueloWS {
             Statement statement = connection.createStatement();
             String id = Integer.toString(id_vuelo);
             String date = Integer.toString(fecha);
-            ResultSet rs = statement.executeQuery("select num_plazas_max, num_plazas_ocupadas from vuelo_fecha where id_vuelo = \"" + id + "\" and fecha = " + date);
+            ResultSet rs = statement.executeQuery("select num_plazas_max, num_plazas_ocupadas from vuelo_fecha where id_vuelo = " + id + " and fecha = " + date);
             int max = rs.getInt("num_plazas_max");
             int ocupadas = rs.getInt("num_plazas_ocupadas");
             int libres = max - ocupadas;
             System.out.println(libres);
             if (libres > 0) {
-                rs = statement.executeQuery("update vuelo_fecha set num_plazas_ocupadas = num_plazas_ocupadas + 1 where id_vuelo = \"" + id + "\" and fecha = " + date);
+                rs = statement.executeQuery("update vuelo_fecha set num_plazas_ocupadas = num_plazas_ocupadas + 1 where id_vuelo = " + id + " and fecha = " + date);
                 System.out.println("S'ha reservat correctament. Ocupades: " + libres+1);
                 return libres;
             }
