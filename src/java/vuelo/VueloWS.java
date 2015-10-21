@@ -21,7 +21,8 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "VueloWS")
 public class VueloWS {
-    String dbpath = "\"jdbc:sqlite:C:\\\\Users\\\\david.molins.goma\\\\Downloads\\\\sqlite-jdbc-3.7.2\"";
+    String dbpath = "\"jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite\"";
+    
     /**
      * Dados un identificador de vuelo y una fecha, retorna el número de plazas que están libres
      */
@@ -30,7 +31,7 @@ public class VueloWS {
     public int consulta_libres(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha) {
         //TODO write your implementation code here:
         try {
-        Class.forName("org.sqlite.JDBC");
+            Class.forName("org.sqlite.JDBC");
         }
         catch (ClassNotFoundException e){
             System.err.println(e.getMessage());
@@ -64,7 +65,7 @@ public class VueloWS {
     public int reserva_plaza(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha){
         //TODO write your implementation code here:
         try {
-        Class.forName("org.sqlite.JDBC");
+            Class.forName("org.sqlite.JDBC");
         }
         catch (ClassNotFoundException e){
             System.err.println(e.getMessage());

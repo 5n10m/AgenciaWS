@@ -20,13 +20,34 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "HotelWS")
 public class HotelWS {
-    String dbpath = "\"jdbc:sqlite:C:\\\\Users\\\\david.molins.goma\\\\Downloads\\\\sqlite-jdbc-3.7.2\"";
+    String dbpath = "\"jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite\"";
+    
+    /**
+     * This is a sample web service operation
+     */
+    @WebMethod(operationName = "hello")
+    public String hello(@WebParam(name = "name") String txt) {
+        return "Benvinguda " + txt + "!";
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "goodbye")
+    public String goodbye(@WebParam(name = "name") String txt1) {
+        //TODO write your implementation code here:
+        return "Adeu " + txt1 + "!";
+    }
+
+    /**
+     * Dados un identificador de hotel y una fecha, retorna el número de habitaciones que están libres
+     */
 
     @WebMethod(operationName = "consulta_libres")
-    public int consulta_libres(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha){
+    public int consulta_libres(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha) {
         //TODO write your implementation code here:
         try {
-        Class.forName("org.sqlite.JDBC");
+            Class.forName("org.sqlite.JDBC");
         }
         catch (ClassNotFoundException e){
             System.err.println(e.getMessage());
@@ -50,10 +71,10 @@ public class HotelWS {
      */
     
     @WebMethod(operationName = "reserva_habitacion")
-    public int reserva_habitacion(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha){
+    public int reserva_habitacion(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha) {
         //TODO write your implementation code here:
-    try {
-        Class.forName("org.sqlite.JDBC");
+        try {
+            Class.forName("org.sqlite.JDBC");
         }
         catch (ClassNotFoundException e){
             System.err.println(e.getMessage());
@@ -66,7 +87,7 @@ public class HotelWS {
             if(0 < Integer.parseInt(res.getString("num_hab_libres"))){
                 Integer rs = statement.executeUpdate("UPDATE hotel_fecha SET num_hab_libres = num_hab_libres-1, num_hab_ocupadas = num_hab_ocupadas + 1 WHERE id_hotel = "+ id_hotel +" and fecha = "+ fecha);
                 //return Integer.parseInt(rs.getString("num_hab_libres"));
-                if(rs>0) return rs;
+                if(rs > 0) return rs;
             }
             return -1;
         } catch(SQLException e) {
