@@ -84,7 +84,7 @@ public class VueloWS {
             if (libres > 0) {
                 rs = statement.executeQuery("update vuelo_fecha set num_plazas_ocupadas = num_plazas_ocupadas + 1 where id_vuelo = " + id + " and fecha = " + date);
                 System.out.println("S'ha reservat correctament. Ocupades: " + libres+1);
-                return libres;
+                return libres+1;
             }
             else {
                 System.out.println("No hi ha places lliures");
