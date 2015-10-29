@@ -16,33 +16,32 @@ import javax.jws.WebParam;
 
 /**
  *
- * @author riogemm.panopio
+ * @author Rio
  */
 @WebService(serviceName = "HotelWS")
 public class HotelWS {
-    String dbpath = "\"jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite\"";
-    
+
     /**
      * This is a sample web service operation
      */
     @WebMethod(operationName = "hello")
     public String hello(@WebParam(name = "name") String txt) {
-        return "Benvinguda " + txt + "!";
+        return "Hello " + txt + " !";
     }
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "goodbye")
-    public String goodbye(@WebParam(name = "name") String txt1) {
+    public String goodbye(@WebParam(name = "name") String name) {
         //TODO write your implementation code here:
-        return "Adeu " + txt1 + "!";
+        return "Goodbye " + name + " !";
     }
 
     /**
      * Dados un identificador de hotel y una fecha, retorna el número de habitaciones que están libres
      */
-
+    
     @WebMethod(operationName = "consulta_libres")
     public int consulta_libres(@WebParam(name = "id_hotel") int id_hotel, @WebParam(name = "fecha") int fecha) {
         //TODO write your implementation code here:
@@ -54,12 +53,23 @@ public class HotelWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(dbpath);
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite");
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT num_hab_libres FROM hotel_fecha where id_hotel = "+ id_hotel +" and fecha = "+ fecha );
             return Integer.parseInt(rs.getString("num_hab_libres"));
-        } catch(SQLException e) {
+        }
+        catch(SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        finally {
+            try {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e) {
+                //Error en tancar la connexio
                 System.err.println(e.getMessage());
+            }
         }
         return 0;
     }
@@ -81,19 +91,33 @@ public class HotelWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(dbpath);
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite");
             Statement statement = connection.createStatement();
-            ResultSet res = statement.executeQuery("SELECT num_hab_libres FROM hotel_fecha where id_hotel = "+ id_hotel +" and fecha = "+ fecha);
-            if(0 < Integer.parseInt(res.getString("num_hab_libres"))){
+            ResultSet res = statement.executeQuery("SELECT * FROM hotel_fecha where id_hotel = "+ id_hotel +" and fecha = "+ fecha);
+            int libres = res.getInt("num_hab_libres");
+            int ocupadas = res.getInt("num_hab_ocupadas");
+            if (libres > 0){
                 Integer rs = statement.executeUpdate("UPDATE hotel_fecha SET num_hab_libres = num_hab_libres-1, num_hab_ocupadas = num_hab_ocupadas + 1 WHERE id_hotel = "+ id_hotel +" and fecha = "+ fecha);
                 //return Integer.parseInt(rs.getString("num_hab_libres"));
                 //if(rs > 0) return rs;
-                if(rs > 0) return (res.getInt("num_hab_libres") + 1);
+                if(rs > 0) return (ocupadas + 1);
+                return -1;
             }
             return -1;
-        } catch(SQLException e) {
-                System.err.println(e.getMessage());
         }
-        return 0;
+        catch(SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        finally {
+            try {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e) {
+                //Error en tancar la connexio
+                System.err.println(e.getMessage());
+            }
+        }
+        return -1;
     }
 }

@@ -5,7 +5,6 @@
  */
 package vuelo;
 
-import com.sun.org.apache.bcel.internal.util.SecuritySupport;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,12 +16,19 @@ import javax.jws.WebParam;
 
 /**
  *
- * @author riogemm.panopio
+ * @author Rio
  */
 @WebService(serviceName = "VueloWS")
 public class VueloWS {
-    String dbpath = "\"jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite\"";
-    
+
+    /**
+     * This is a sample web service operation
+     */
+    @WebMethod(operationName = "hello")
+    public String hello(@WebParam(name = "name") String txt) {
+        return "Hello " + txt + " !";
+    }
+
     /**
      * Dados un identificador de vuelo y una fecha, retorna el número de plazas que están libres
      */
@@ -38,7 +44,7 @@ public class VueloWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(dbpath);
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite");
             Statement statement = connection.createStatement();
             String id = Integer.toString(id_vuelo);
             String date = Integer.toString(fecha);
@@ -46,11 +52,20 @@ public class VueloWS {
             int max = rs.getInt("num_plazas_max");
             int ocupadas = rs.getInt("num_plazas_ocupadas");
             int libres = max - ocupadas;
-            System.out.println(libres);
             return libres;
         }
         catch(SQLException e) {
             System.err.println(e.getMessage());
+        }
+        finally {
+            try {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e) {
+                //Error en tancar la connexio
+                System.err.println(e.getMessage());
+            }
         }
         return 0;
     }
@@ -62,7 +77,7 @@ public class VueloWS {
      */
     
     @WebMethod(operationName = "reserva_plaza")
-    public int reserva_plaza(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha){
+    public int reserva_plaza(@WebParam(name = "id_vuelo") int id_vuelo, @WebParam(name = "fecha") int fecha) {
         //TODO write your implementation code here:
         try {
             Class.forName("org.sqlite.JDBC");
@@ -72,7 +87,7 @@ public class VueloWS {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(dbpath);
+            connection = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Rio\\Dropbox\\UPC\\AD\\P3\\practica3.sqlite");
             Statement statement = connection.createStatement();
             String id = Integer.toString(id_vuelo);
             String date = Integer.toString(fecha);
@@ -80,19 +95,25 @@ public class VueloWS {
             int max = rs.getInt("num_plazas_max");
             int ocupadas = rs.getInt("num_plazas_ocupadas");
             int libres = max - ocupadas;
-            System.out.println(libres);
             if (libres > 0) {
-                rs = statement.executeQuery("update vuelo_fecha set num_plazas_ocupadas = num_plazas_ocupadas + 1 where id_vuelo = " + id + " and fecha = " + date);
-                System.out.println("S'ha reservat correctament. Ocupades: " + libres+1);
-                return libres+1;
-            }
-            else {
-                System.out.println("No hi ha places lliures");
+                Integer res = statement.executeUpdate("update vuelo_fecha set num_plazas_ocupadas = num_plazas_ocupadas + 1 where id_vuelo = " + id + " and fecha = " + date);
+                if (res > 0) return (ocupadas + 1);
                 return -1;
             }
+            return -1;
         }
         catch(SQLException e) {
             System.err.println(e.getMessage());
+        }
+        finally {
+            try {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e) {
+                //Error en tancar la connexio
+                System.err.println(e.getMessage());
+            }
         }
         return -1;
     }
